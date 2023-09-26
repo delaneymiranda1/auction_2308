@@ -66,4 +66,31 @@ RSpec.describe Auction do
     end
   end
 
+  describe '#bidders' do
+    it 'returns attendees names' do
+      @auction.add_item(@item1)
+      @auction.add_item(@item2)
+      @auction.add_item(@item3)
+      @auction.add_item(@item4)
+      @auction.add_item(@item5)
+      @item3.add_bid(@attendee2, 15)
+      expect(@auction.bidders).to eq(["Bob", "Megan", "Mike"])
+    end
+  end
+
+  describe '#bidder_info' do
+    it 'returns attendees, their budget and items they bid on' do
+      @auction.add_item(@item1)
+      @auction.add_item(@item2)
+      @auction.add_item(@item3)
+      @auction.add_item(@item4)
+      @auction.add_item(@item5)
+      @item3.add_bid(@attendee2, 15)
+      expect(@auction.bidder_info).to be_a(Hash)
+      expect(@auction.bidder_info[@attendee1]).to eq({ budget: 50, items: [@item1] })
+      expect(@auction.bidder_info[@attendee2]).to eq({ budget: 75, items: [@item1, @item3] })
+      expect(@auction.bidder_info[@attendee3]).to eq({ budget: 100, items: [@item4] })
+    end
+  end
+
 end

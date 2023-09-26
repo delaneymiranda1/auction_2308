@@ -19,4 +19,19 @@ class Auction
   def potential_revenue
     @items.map { |item| item.current_high_bid }.sum
   end
+
+  def bidders
+    @items.flat_map { |item| item.bids.keys.map(&:name) }.uniq
+  end
+
+  def bidder_info
+    bidder_info = {}
+    @items.each do |item|
+      item.bids.each do |attendee, bid_amount|
+        bidder_info[attendee] ||= { budget: attendee.budget, items: [] }
+        bidder_info[attendee][:items] << item
+      end
+    end
+    bidder_info
+  end
 end
